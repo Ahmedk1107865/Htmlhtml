@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logo Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #f0f0f0;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, select, button {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    img {
+      margin-top: 20px;
+      max-width: 100%;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <form id="logoForm">
+    <label>Enter Your Name:
+      <input type="text" id="name" required />
+    </label>
+    <label>Select Logo Style (1-135):
+      <input type="number" id="code" min="1" max="135" required />
+    </label>
+    <button type="submit">Generate Logo</button>
+  </form>
+  <img id="logoImage" style="display:none" />
+
+  <script>
+    document.getElementById('logoForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const code = document.getElementById('code').value.trim();
+
+      const apiUrl = `http://fi3.bot-hosting.net:21943/api/ephoto/${code}?text=${encodeURIComponent(name)}`;
+
+      const img = document.getElementById('logoImage');
+      img.src = apiUrl;
+      img.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
