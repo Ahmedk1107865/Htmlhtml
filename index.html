@@ -1,81 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Logo Generator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 20px;
-    }
-    .container {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      max-width: 400px;
-      width: 100%;
-    }
-    h1 {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    img {
-      margin-top: 20px;
-      max-width: 100%;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Logo Generator</h1>
-    <form id="logoForm">
-      <input type="text" id="name" placeholder="Enter your name" required />
-      <select id="style" required>
-        <option value="">Select Style</option>
-        <!-- Generating style options dynamically -->
-        <script>
-          for (let i = 1; i <= 135; i++) {
-            document.write(`<option value="${i}">Style ${i}</option>`);
-          }
-        </script>
-      </select>
-      <button type="submit">Generate Logo</button>
-    </form>
-    <div id="output"></div>
-  </div>
+  <form id="logo-form">
+    <label for="logo-type">Logo Type:</label>
+    <input type="number" id="logo-type" name="logo-type">
+    <label for="logo-text">Logo Text:</label>
+    <input type="text" id="logo-text" name="logo-text">
+    <button type="submit">Generate Logo</button>
+  </form>
+  <div id="logo-container"></div>
 
   <script>
-    document.getElementById("logoForm").addEventListener("submit", function (e) {
+    const form = document.getElementById('logo-form');
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      const name = document.getElementById("name").value.trim();
-      const style = document.getElementById("style").value;
-      const output = document.getElementById("output");
-
-      if (!name || !style) {
-        alert("Please enter a name and select a style.");
-        return;
-      }
-
-      const imageUrl = `https://www.textpro.me/images/user_img/${style}/${encodeURIComponent(name)}.jpg`;
-
-      output.innerHTML = `<img src="${imageUrl}" alt="Generated Logo" onerror="this.onerror=null;this.src='https://via.placeholder.com/300x100?text=Error+Loading+Image';" />`;
+      const logoType = document.getElementById('logo-type').value;
+      const logoText = document.getElementById('logo-text').value;
+      const response = await fetch(`/api/logo?logoType=${logoType}&logoText=${logoText}`);
+      const logoData = await response.json();
+      // Display the generated logo
+      const logoContainer = document.getElementById('logo-container');
+      logoContainer.innerHTML = `<img src="${logoData.logo}" alt="Generated Logo">`;
     });
   </script>
 </body>
