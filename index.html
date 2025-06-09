@@ -24,8 +24,7 @@
         const logoText = document.getElementById('logo-text').value;
         const response = await fetch(`/api/logo?logoType=${logoType}&logoText=${logoText}`);
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(`HTTP error! status: ${response.status}, details: ${errorData.details}`);
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
         const logoBlob = await response.blob();
         const logoUrl = URL.createObjectURL(logoBlob);
