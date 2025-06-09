@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     res.write(logoBuffer);
     res.end();
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to generate logo' });
+    console.error('Error generating logo:', error);
+    res.status(500).json({ error: 'Failed to generate logo', details: error.message });
   }
 }
