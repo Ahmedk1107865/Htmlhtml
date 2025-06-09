@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,13 +19,22 @@
     const form = document.getElementById('logo-form');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const logoType = document.getElementById('logo-type').value;
-      const logoText = document.getElementById('logo-text').value;
-      const response = await fetch(`/api/logo?logoType=${logoType}&logoText=${logoText}`);
-      const logoData = await response.json();
-      // Display the generated logo
-      const logoContainer = document.getElementById('logo-container');
-      logoContainer.innerHTML = `<img src="${logoData.logo}" alt="Generated Logo">`;
+      try {
+        const logoType = document.getElementById('logo-type').value;
+        const logoText = document.getElementById('logo-text').value;
+        const response = await fetch(`/api/logo?logoType=${logoType}&logoText=${logoText}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const logoBlob = await response.blob();
+        const logoUrl = URL.createObjectURL(logoBlob);
+        const logoContainer = document.getElementById('logo-container');
+        logoContainer.innerHTML = `<img src="${logoUrl}" alt="Generated Logo">`;
+      } catch (error) {
+        console.error(error);
+        const logoContainer = document.getElementById('logo-container');
+        logoContainer.innerHTML = `<p>Error generating logo: ${error.message}</p>`;
+      }
     });
   </script>
 </body>
